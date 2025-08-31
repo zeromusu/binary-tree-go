@@ -1,57 +1,57 @@
 package models
 
 type Node struct {
-	Key        int   `json:"key"`
-	LeftChild  *Node `json:"left_child"`
-	RightChild *Node `json:"right_child"`
+	key        int
+	leftChild  *Node
+	rightChild *Node
 }
 
-func CreateNode(key int) *Node {
-	return &Node{Key: key}
+func createNode(key int) *Node {
+	return &Node{key: key}
 }
 
-func (n *Node) DelNode() bool {
+func (n *Node) delNode() bool {
 	if n == nil {
 		return false
 	}
 
-	n.SetLeftChild(nil)
-	n.SetRightChild(nil)
+	n.setLeftChild(nil)
+	n.setRightChild(nil)
 
 	return true
 }
 
-func (n *Node) SearchNode(key int) *Node {
+func (n *Node) searchNode(key int) *Node {
 	if n == nil {
 		return nil
 	}
-	if n.GetKey() == key {
+	if n.getKey() == key {
 		return n
 	}
 
-	if n.GetKey() > key {
-		return n.GetLeftChild().SearchNode(key)
+	if n.getKey() > key {
+		return n.getLeftChild().searchNode(key)
 	}
 
-	return n.GetRightChild().SearchNode(key)
+	return n.getRightChild().searchNode(key)
 }
 
-func (n *Node) GetKey() int {
-	return n.Key
+func (n *Node) getKey() int {
+	return n.key
 }
 
-func (n *Node) GetLeftChild() *Node {
-	return n.LeftChild
+func (n *Node) getLeftChild() *Node {
+	return n.leftChild
 }
 
-func (n *Node) SetLeftChild(node *Node) {
-	n.LeftChild = node
+func (n *Node) setLeftChild(node *Node) {
+	n.leftChild = node
 }
 
-func (n *Node) GetRightChild() *Node {
-	return n.RightChild
+func (n *Node) getRightChild() *Node {
+	return n.rightChild
 }
 
-func (n *Node) SetRightChild(node *Node) {
-	n.RightChild = node
+func (n *Node) setRightChild(node *Node) {
+	n.rightChild = node
 }

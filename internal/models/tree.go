@@ -6,29 +6,29 @@ var root *Node
 
 func AddNode(key int) error {
 	if root == nil {
-		root = CreateNode(key)
+		root = createNode(key)
 		return nil
 	}
-	node := root.SearchNode(key)
+	node := root.searchNode(key)
 	if node != nil {
 		return fmt.Errorf("%d is already inserted", key)
 	}
 
-	node = CreateNode(key)
+	node = createNode(key)
 	cursor := root
 	for {
-		if cursor.GetKey() > key {
-			if cursor.GetLeftChild() == nil {
-				cursor.SetLeftChild(node)
+		if cursor.getKey() > key {
+			if cursor.getLeftChild() == nil {
+				cursor.setLeftChild(node)
 				break
 			}
-			cursor = cursor.GetLeftChild()
+			cursor = cursor.getLeftChild()
 		} else {
-			if cursor.GetRightChild() == nil {
-				cursor.SetRightChild(node)
+			if cursor.getRightChild() == nil {
+				cursor.setRightChild(node)
 				break
 			}
-			cursor = cursor.GetRightChild()
+			cursor = cursor.getRightChild()
 		}
 	}
 	return nil
