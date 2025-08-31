@@ -21,6 +21,21 @@ func (n *Node) DelNode() bool {
 	return true
 }
 
+func (n *Node) SearchNode(key int) *Node {
+	if n == nil {
+		return nil
+	}
+	if n.GetKey() == key {
+		return n
+	}
+
+	if n.GetKey() > key {
+		return n.GetLeftChild().SearchNode(key)
+	}
+
+	return n.GetRightChild().SearchNode(key)
+}
+
 func (n *Node) GetKey() int {
 	return n.Key
 }
