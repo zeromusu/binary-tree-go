@@ -6,15 +6,8 @@ type Node struct {
 	RightChild *Node `json:"right_child"`
 }
 
-func CreateNode(key int, left *Node, right *Node) *Node {
-	node := &Node{Key: key}
-	if left != nil {
-		node.SetLeftChild(left)
-	}
-	if right != nil {
-		node.SetRightChild(right)
-	}
-	return node
+func CreateNode(key int) *Node {
+	return &Node{Key: key}
 }
 
 func (n *Node) DelNode() bool {

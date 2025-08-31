@@ -3,19 +3,18 @@ package models
 import "testing"
 
 const initKey = 10
-const changedKey = 20
 const leftChildKey = initKey - 1
 const rightChildKey = initKey + 1
 
 func TestCreateNode(t *testing.T) {
-	n := CreateNode(initKey, nil, nil)
+	n := CreateNode(initKey)
 	if n == nil {
 		t.Fatalf("CreateNode returned nil")
 	}
 }
 
 func TestDeleteNode(t *testing.T) {
-	n := CreateNode(initKey, nil, nil)
+	n := CreateNode(initKey)
 	result := n.DelNode()
 	if result == false {
 		t.Errorf("DelNode expected true, got false")
@@ -23,24 +22,15 @@ func TestDeleteNode(t *testing.T) {
 }
 
 func TestGetKey(t *testing.T) {
-	n := CreateNode(initKey, nil, nil)
+	n := CreateNode(initKey)
 	if n.GetKey() != initKey {
 		t.Errorf("GetKey expected key=%d, got %d", initKey, n.GetKey())
 	}
 }
 
-func TestGetLeftChild(t *testing.T) {
-	left := CreateNode(leftChildKey, nil, nil)
-	parent := CreateNode(initKey, left, nil)
-
-	if parent.GetLeftChild() != left {
-		t.Errorf("GetLeftChild expected left=%v, got %v", left, parent.GetLeftChild())
-	}
-}
-
-func TestSetLeftChild(t *testing.T) {
-	parent := CreateNode(initKey, nil, nil)
-	left := CreateNode(leftChildKey, nil, nil)
+func TestSetAndGetLeftChild(t *testing.T) {
+	parent := CreateNode(initKey)
+	left := CreateNode(leftChildKey)
 
 	parent.SetLeftChild(left)
 	if parent.GetLeftChild() != left {
@@ -48,18 +38,9 @@ func TestSetLeftChild(t *testing.T) {
 	}
 }
 
-func TestGetRightChild(t *testing.T) {
-	right := CreateNode(rightChildKey, nil, nil)
-	parent := CreateNode(initKey, nil, right)
-
-	if parent.GetRightChild() != right {
-		t.Errorf("GetRightChild expected right=%v, got %v", right, parent.GetRightChild())
-	}
-}
-
-func TestSetRightChild(t *testing.T) {
-	parent := CreateNode(initKey, nil, nil)
-	right := CreateNode(rightChildKey, nil, nil)
+func TestSetAndGetRightChild(t *testing.T) {
+	parent := CreateNode(initKey)
+	right := CreateNode(rightChildKey)
 
 	parent.SetRightChild(right)
 	if parent.GetRightChild() != right {
