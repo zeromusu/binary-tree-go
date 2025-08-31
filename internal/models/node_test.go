@@ -8,66 +8,66 @@ const rightChildKey = initKey + 5
 const noExistingKey = -1
 
 func TestCreateNode(t *testing.T) {
-	n := CreateNode(initKey)
+	n := createNode(initKey)
 	if n == nil {
 		t.Fatalf("CreateNode returned nil")
 	}
 }
 
 func TestDeleteNode(t *testing.T) {
-	n := CreateNode(initKey)
-	result := n.DelNode()
+	n := createNode(initKey)
+	result := n.delNode()
 	if result == false {
 		t.Errorf("DelNode expected true, got false")
 	}
 }
 
 func TestSearchNode(t *testing.T) {
-	n := CreateNode(initKey)
-	searchedNode := n.SearchNode(noExistingKey)
+	n := createNode(initKey)
+	searchedNode := n.searchNode(noExistingKey)
 	if searchedNode != nil {
 		t.Errorf("SearchNode for no existing key expected nil, got %v", searchedNode)
 	}
 
-	left := CreateNode(leftChildKey)
-	n.SetLeftChild(left)
-	leftLeft := CreateNode(leftChildKey - 1)
-	leftRight := CreateNode(leftChildKey + 1)
-	left.SetLeftChild(leftLeft)
-	left.SetRightChild(leftRight)
-	searchedNode = n.SearchNode(leftChildKey - 1)
+	left := createNode(leftChildKey)
+	n.setLeftChild(left)
+	leftLeft := createNode(leftChildKey - 1)
+	leftRight := createNode(leftChildKey + 1)
+	left.setLeftChild(leftLeft)
+	left.setRightChild(leftRight)
+	searchedNode = n.searchNode(leftChildKey - 1)
 	if searchedNode != leftLeft {
 		t.Errorf("SearchNode for %d expected %v, got %v", leftChildKey-1, leftLeft, searchedNode)
 	}
-	searchedNode = n.SearchNode(leftChildKey + 1)
+	searchedNode = n.searchNode(leftChildKey + 1)
 	if searchedNode != leftRight {
 		t.Errorf("SearchNode for %d expected %v, got %v", leftChildKey+1, leftRight, searchedNode)
 	}
 }
 
 func TestGetKey(t *testing.T) {
-	n := CreateNode(initKey)
-	if n.GetKey() != initKey {
-		t.Errorf("GetKey expected key=%d, got %d", initKey, n.GetKey())
+	n := createNode(initKey)
+	if n.getKey() != initKey {
+		t.Errorf("GetKey expected key=%d, got %d", initKey, n.getKey())
 	}
 }
 
 func TestSetAndGetLeftChild(t *testing.T) {
-	parent := CreateNode(initKey)
-	left := CreateNode(leftChildKey)
+	parent := createNode(initKey)
+	left := createNode(leftChildKey)
 
-	parent.SetLeftChild(left)
-	if parent.GetLeftChild() != left {
-		t.Errorf("SetLeftChild expected left=%v, got %v", left, parent.GetLeftChild())
+	parent.setLeftChild(left)
+	if parent.getLeftChild() != left {
+		t.Errorf("SetLeftChild expected left=%v, got %v", left, parent.getLeftChild())
 	}
 }
 
 func TestSetAndGetRightChild(t *testing.T) {
-	parent := CreateNode(initKey)
-	right := CreateNode(rightChildKey)
+	parent := createNode(initKey)
+	right := createNode(rightChildKey)
 
-	parent.SetRightChild(right)
-	if parent.GetRightChild() != right {
-		t.Errorf("SetRightChild expected right=%v, got %v", right, parent.GetRightChild())
+	parent.setRightChild(right)
+	if parent.getRightChild() != right {
+		t.Errorf("SetRightChild expected right=%v, got %v", right, parent.getRightChild())
 	}
 }
