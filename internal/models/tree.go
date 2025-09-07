@@ -4,7 +4,7 @@ import "fmt"
 
 var root *Node
 
-func AddNode(key int) error {
+func addNode(key int) error {
 	if root == nil {
 		root = createNode(key)
 		return nil

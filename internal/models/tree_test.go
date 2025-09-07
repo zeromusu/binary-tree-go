@@ -12,7 +12,7 @@ func teardown() {
 
 func TestAddNodeInsertRoot(t *testing.T) {
 	setup()
-	err := AddNode(initKey)
+	err := addNode(initKey)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -24,9 +24,9 @@ func TestAddNodeInsertRoot(t *testing.T) {
 
 func TestAddNodeInsertLeftAndRight(t *testing.T) {
 	setup()
-	_ = AddNode(initKey)
-	_ = AddNode(leftChildKey)
-	_ = AddNode(rightChildKey)
+	_ = addNode(initKey)
+	_ = addNode(leftChildKey)
+	_ = addNode(rightChildKey)
 
 	if root.getLeftChild() == nil || root.getLeftChild().getKey() != leftChildKey {
 		t.Errorf("expected left child=%d, got %v", leftChildKey, root.getLeftChild())
@@ -41,8 +41,8 @@ func TestAddNodeInsertLeftAndRight(t *testing.T) {
 
 func TestAddNodeDuplicate(t *testing.T) {
 	setup()
-	_ = AddNode(initKey)
-	err := AddNode(initKey)
+	_ = addNode(initKey)
+	err := addNode(initKey)
 	if err == nil {
 		t.Errorf("expected error when inserting duplicate key")
 	}
