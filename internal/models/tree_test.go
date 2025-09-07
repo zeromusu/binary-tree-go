@@ -1,6 +1,11 @@
 package models
 
-import "testing"
+import (
+	"bytes"
+	"os"
+	"strings"
+	"testing"
+)
 
 func setup() {
 	root = nil
@@ -46,4 +51,79 @@ func TestAddNodeDuplicate(t *testing.T) {
 	if err == nil {
 		t.Errorf("expected error when inserting duplicate key")
 	}
+}
+
+func TestShowTree(t *testing.T) {
+	setup()
+
+	old := os.Stdout
+	r, w, _ := os.Pipe()
+	os.Stdout = w
+
+	addNode(10)
+	addNode(5)
+	addNode(15)
+	addNode(3)
+	addNode(7)
+	addNode(13)
+	addNode(18)
+	addNode(20)
+	addNode(16)
+	addNode(11)
+	addNode(14)
+	addNode(8)
+	addNode(6)
+	addNode(4)
+	addNode(1)
+
+	showTree()
+
+	w.Close()
+	os.Stdout = old
+
+	var buf bytes.Buffer
+	_, _ = buf.ReadFrom(r)
+
+	got := buf.String()
+
+	want := `                               |- 20
+                               |
+                          |- 18-
+                          |    |
+                          |    |- 16
+                          |
+                     |- 15-
+                     |    |
+                     |    |    |- 14
+                     |    |    |
+                     |    |- 13-
+                     |         |
+                     |         |- 11
+                     |
+                   10-
+                     |
+                     |         |-  8
+                     |         |
+                     |    |-  7-
+                     |    |    |
+                     |    |    |-  6
+                     |    |
+                     |-  5-
+                          |
+                          |    |-  4
+                          |    |
+                          |-  3-
+                               |
+                               |-  1`
+
+	normalize := func(s string) string {
+		s = strings.ReplaceAll(s, " ", "")
+		s = strings.ReplaceAll(s, "\n", "")
+		return s
+	}
+
+	if normalize(got) != normalize(want) {
+		t.Errorf("unexpected output:\nGot:\n%s\nWant:\n%s", got, want)
+	}
+	teardown()
 }
