@@ -36,6 +36,53 @@ func addNode(key int) error {
 	return nil
 }
 
+func deleteNode(key int) error {
+	if root == nil {
+		return fmt.Errorf("tree is empty")
+	}
+
+	var deleted bool
+	root, deleted = deleteNodeRec(root, key)
+	if !deleted {
+		return fmt.Errorf("%d not found", key)
+	}
+
+	root = rebalance(root)
+	return nil
+}
+
+func deleteNodeRec(node *Node, key int) (*Node, bool) {
+	if node == nil {
+		return nil, false
+	}
+
+	if key < node.getKey() {
+		left, deleted := deleteNodeRec(node.getLeftChild(), key)
+		node.setLeftChild(left)
+		return node, deleted
+	} else if key > node.getKey() {
+		right, deleted := deleteNodeRec(node.getRightChild(), key)
+		node.setRightChild(right)
+		return node, deleted
+	} else {
+		if node.getLeftChild() == nil {
+			return node.getRightChild(), true
+		} else if node.getRightChild() == nil {
+			return node.getLeftChild(), true
+		}
+
+		minRight := node.getRightChild()
+		for minRight.getLeftChild() != nil {
+			minRight = minRight.getLeftChild()
+		}
+		node.setKey(minRight.getKey())
+		right, _ := deleteNodeRec(node.getRightChild(), minRight.getKey())
+		node.setRightChild(right)
+
+		return node, true
+	}
+}
+
 func rebalance(node *Node) *Node {
 	if node == nil {
 		return nil

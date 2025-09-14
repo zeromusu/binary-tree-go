@@ -53,6 +53,59 @@ func TestAddNodeDuplicate(t *testing.T) {
 	}
 }
 
+func TestDeleteNode(t *testing.T) {
+	setup()
+
+	addNode(10)
+	addNode(5)
+	addNode(15)
+	addNode(3)
+	addNode(7)
+	addNode(13)
+	addNode(18)
+
+	gotBefore := captureOutput(func() {
+		showTree()
+	})
+
+	deleteKey := 15
+	if err := deleteNode(deleteKey); err != nil {
+		t.Fatalf("deleteNode failed: %v", err)
+	}
+
+	gotAfter := captureOutput(func() {
+		showTree()
+	})
+
+	want := `
+       |- 18-
+       |    |
+       |    |- 13
+       |
+     10-
+       |
+       |    |- 7
+       |    |
+       |- 5-
+            |
+            |- 3
+`
+
+	normalize := func(s string) string {
+		s = strings.ReplaceAll(s, " ", "")
+		s = strings.ReplaceAll(s, "\n", "")
+		return s
+	}
+
+	if normalize(gotAfter) != normalize(want) {
+		t.Errorf("unexpected tree after deleteNode(%d):\nGot:\n%s\nWant:\n%s", deleteKey, gotAfter, want)
+	}
+
+	if gotBefore == gotAfter {
+		t.Errorf("tree did not change after deleteNode(%d)", deleteKey)
+	}
+}
+
 func TestRebalanceRotations(t *testing.T) {
 	setup()
 
