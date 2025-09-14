@@ -33,6 +33,7 @@ func addNode(key int) error {
 			cursor = cursor.getRightChild()
 		}
 	}
+	root = rebalance(root)
 	return nil
 }
 

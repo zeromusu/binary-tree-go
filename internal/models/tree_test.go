@@ -113,8 +113,6 @@ func TestRebalanceRotations(t *testing.T) {
 	addNode(2)
 	addNode(3)
 
-	root = rebalance(root)
-
 	if root == nil || root.getKey() != 2 {
 		t.Fatalf("RR rotation failed: root want=2, got=%v", root.getKey())
 	}
@@ -130,8 +128,6 @@ func TestRebalanceRotations(t *testing.T) {
 	addNode(3)
 	addNode(2)
 	addNode(1)
-
-	root = rebalance(root)
 
 	if root == nil || root.getKey() != 2 {
 		t.Fatalf("LL rotation failed: root want=2, got=%v", root.getKey())
@@ -149,8 +145,6 @@ func TestRebalanceRotations(t *testing.T) {
 	addNode(1)
 	addNode(2)
 
-	root = rebalance(root)
-
 	if root == nil || root.getKey() != 2 {
 		t.Fatalf("LR rotation failed: root want=2, got=%v", root.getKey())
 	}
@@ -160,8 +154,6 @@ func TestRebalanceRotations(t *testing.T) {
 	addNode(1)
 	addNode(3)
 	addNode(2)
-
-	root = rebalance(root)
 
 	if root == nil || root.getKey() != 2 {
 		t.Fatalf("RL rotation failed: root want=2, got=%v", root.getKey())
@@ -176,12 +168,6 @@ func TestRebalance(t *testing.T) {
 	addNode(3)
 	addNode(4)
 	addNode(5)
-
-	gotBefore := captureOutput(func() {
-		showTree()
-	})
-
-	root = rebalance(root)
 
 	gotAfter := captureOutput(func() {
 		showTree()
@@ -207,10 +193,6 @@ func TestRebalance(t *testing.T) {
 
 	if normalize(gotAfter) != normalize(want) {
 		t.Errorf("unexpected output:\nGot:\n%s\nWant:\n%s", gotAfter, want)
-	}
-
-	if gotBefore == gotAfter {
-		t.Errorf("rebalance had no effect:\n%s", gotAfter)
 	}
 
 	teardown()
