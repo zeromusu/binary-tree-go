@@ -40,6 +40,10 @@ func (n *Node) getKey() int {
 	return n.key
 }
 
+func (n *Node) setKey(key int) {
+	n.key = key
+}
+
 func (n *Node) getLeftChild() *Node {
 	return n.leftChild
 }

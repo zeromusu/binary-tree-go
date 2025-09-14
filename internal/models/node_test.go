@@ -3,6 +3,7 @@ package models
 import "testing"
 
 const initKey = 10
+const changedKey = initKey + 10
 const leftChildKey = initKey - 5
 const rightChildKey = initKey + 5
 const noExistingKey = -1
@@ -45,10 +46,14 @@ func TestSearchNode(t *testing.T) {
 	}
 }
 
-func TestGetKey(t *testing.T) {
+func TestSetAndGetKey(t *testing.T) {
 	n := createNode(initKey)
 	if n.getKey() != initKey {
 		t.Errorf("GetKey expected key=%d, got %d", initKey, n.getKey())
+	}
+	n.setKey(changedKey)
+	if n.getKey() != changedKey {
+		t.Errorf("SetKey expected key=%d, got %d", changedKey, n.getKey())
 	}
 }
 
