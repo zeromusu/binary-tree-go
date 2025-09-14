@@ -53,6 +53,116 @@ func TestAddNodeDuplicate(t *testing.T) {
 	}
 }
 
+func TestRebalanceRotations(t *testing.T) {
+	setup()
+
+	addNode(1)
+	addNode(2)
+	addNode(3)
+
+	root = rebalance(root)
+
+	if root == nil || root.getKey() != 2 {
+		t.Fatalf("RR rotation failed: root want=2, got=%v", root.getKey())
+	}
+	if root.getLeftChild() == nil || root.getLeftChild().getKey() != 1 {
+		t.Fatalf("RR rotation left child wrong")
+	}
+	if root.getRightChild() == nil || root.getRightChild().getKey() != 3 {
+		t.Fatalf("RR rotation right child wrong")
+	}
+
+	setup()
+
+	addNode(3)
+	addNode(2)
+	addNode(1)
+
+	root = rebalance(root)
+
+	if root == nil || root.getKey() != 2 {
+		t.Fatalf("LL rotation failed: root want=2, got=%v", root.getKey())
+	}
+	if root.getLeftChild() == nil || root.getLeftChild().getKey() != 1 {
+		t.Fatalf("LL rotation left child wrong")
+	}
+	if root.getRightChild() == nil || root.getRightChild().getKey() != 3 {
+		t.Fatalf("LL rotation right child wrong")
+	}
+
+	setup()
+
+	addNode(3)
+	addNode(1)
+	addNode(2)
+
+	root = rebalance(root)
+
+	if root == nil || root.getKey() != 2 {
+		t.Fatalf("LR rotation failed: root want=2, got=%v", root.getKey())
+	}
+
+	setup()
+
+	addNode(1)
+	addNode(3)
+	addNode(2)
+
+	root = rebalance(root)
+
+	if root == nil || root.getKey() != 2 {
+		t.Fatalf("RL rotation failed: root want=2, got=%v", root.getKey())
+	}
+}
+
+func TestRebalance(t *testing.T) {
+	setup()
+
+	addNode(1)
+	addNode(2)
+	addNode(3)
+	addNode(4)
+	addNode(5)
+
+	gotBefore := captureOutput(func() {
+		showTree()
+	})
+
+	root = rebalance(root)
+
+	gotAfter := captureOutput(func() {
+		showTree()
+	})
+
+	want := `
+       |- 5
+       |
+  |- 4-
+  |    |
+  |    |- 3
+  |
+ 2-
+  |
+  |- 1
+`
+
+	normalize := func(s string) string {
+		s = strings.ReplaceAll(s, " ", "")
+		s = strings.ReplaceAll(s, "\n", "")
+		return s
+	}
+
+	if normalize(gotAfter) != normalize(want) {
+		t.Errorf("unexpected output:\nGot:\n%s\nWant:\n%s", gotAfter, want)
+	}
+
+	if gotBefore == gotAfter {
+		t.Errorf("rebalance had no effect:\n%s", gotAfter)
+	}
+
+	teardown()
+}
+
 func TestShowTree(t *testing.T) {
 	setup()
 
@@ -126,4 +236,19 @@ func TestShowTree(t *testing.T) {
 		t.Errorf("unexpected output:\nGot:\n%s\nWant:\n%s", got, want)
 	}
 	teardown()
+}
+
+func captureOutput(f func()) string {
+	old := os.Stdout
+	r, w, _ := os.Pipe()
+	os.Stdout = w
+
+	f()
+
+	w.Close()
+	os.Stdout = old
+
+	var buf bytes.Buffer
+	_, _ = buf.ReadFrom(r)
+	return buf.String()
 }
