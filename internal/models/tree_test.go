@@ -53,6 +53,36 @@ func TestAddNodeDuplicate(t *testing.T) {
 	}
 }
 
+func TestGetNode(t *testing.T) {
+	setup()
+
+	AddNode(5)
+	AddNode(3)
+	AddNode(8)
+	AddNode(1)
+	AddNode(4)
+	AddNode(6)
+	AddNode(10)
+
+	tests := []struct {
+		key  int
+		want bool
+	}{
+		{5, true},
+		{3, true},
+		{10, true},
+		{7, false},
+		{0, false},
+	}
+
+	for _, tt := range tests {
+		got := FindNode(tt.key)
+		if got != tt.want {
+			t.Errorf("FindNode(%d) = %v, want %v", tt.key, got, tt.want)
+		}
+	}
+}
+
 func TestDeleteNode(t *testing.T) {
 	setup()
 

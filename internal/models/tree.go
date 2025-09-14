@@ -37,6 +37,10 @@ func AddNode(key int) error {
 	return nil
 }
 
+func FindNode(key int) bool {
+	return root.searchNode(key) != nil
+}
+
 func DeleteNode(key int) error {
 	if root == nil {
 		return fmt.Errorf("tree is empty")
