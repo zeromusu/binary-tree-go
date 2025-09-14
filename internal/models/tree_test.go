@@ -17,7 +17,7 @@ func teardown() {
 
 func TestAddNodeInsertRoot(t *testing.T) {
 	setup()
-	err := addNode(initKey)
+	err := AddNode(initKey)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -29,9 +29,9 @@ func TestAddNodeInsertRoot(t *testing.T) {
 
 func TestAddNodeInsertLeftAndRight(t *testing.T) {
 	setup()
-	_ = addNode(initKey)
-	_ = addNode(leftChildKey)
-	_ = addNode(rightChildKey)
+	_ = AddNode(initKey)
+	_ = AddNode(leftChildKey)
+	_ = AddNode(rightChildKey)
 
 	if root.getLeftChild() == nil || root.getLeftChild().getKey() != leftChildKey {
 		t.Errorf("expected left child=%d, got %v", leftChildKey, root.getLeftChild())
@@ -46,35 +46,65 @@ func TestAddNodeInsertLeftAndRight(t *testing.T) {
 
 func TestAddNodeDuplicate(t *testing.T) {
 	setup()
-	_ = addNode(initKey)
-	err := addNode(initKey)
+	_ = AddNode(initKey)
+	err := AddNode(initKey)
 	if err == nil {
 		t.Errorf("expected error when inserting duplicate key")
+	}
+}
+
+func TestGetNode(t *testing.T) {
+	setup()
+
+	AddNode(5)
+	AddNode(3)
+	AddNode(8)
+	AddNode(1)
+	AddNode(4)
+	AddNode(6)
+	AddNode(10)
+
+	tests := []struct {
+		key  int
+		want bool
+	}{
+		{5, true},
+		{3, true},
+		{10, true},
+		{7, false},
+		{0, false},
+	}
+
+	for _, tt := range tests {
+		got := FindNode(tt.key)
+		if got != tt.want {
+			t.Errorf("FindNode(%d) = %v, want %v", tt.key, got, tt.want)
+		}
 	}
 }
 
 func TestDeleteNode(t *testing.T) {
 	setup()
 
-	addNode(10)
-	addNode(5)
-	addNode(15)
-	addNode(3)
-	addNode(7)
-	addNode(13)
-	addNode(18)
+	AddNode(10)
+	AddNode(5)
+	AddNode(15)
+	AddNode(3)
+	AddNode(7)
+	AddNode(13)
+	AddNode(18)
 
 	gotBefore := captureOutput(func() {
-		showTree()
+		ShowTree()
 	})
 
 	deleteKey := 15
-	if err := deleteNode(deleteKey); err != nil {
+	if err := DeleteNode(deleteKey); err != nil {
 		t.Fatalf("deleteNode failed: %v", err)
 	}
 
 	gotAfter := captureOutput(func() {
-		showTree()
+		ShowTree()
 	})
 
 	want := `
@@ -109,9 +139,9 @@ func TestDeleteNode(t *testing.T) {
 func TestRebalanceRotations(t *testing.T) {
 	setup()
 
-	addNode(1)
-	addNode(2)
-	addNode(3)
+	AddNode(1)
+	AddNode(2)
+	AddNode(3)
 
 	if root == nil || root.getKey() != 2 {
 		t.Fatalf("RR rotation failed: root want=2, got=%v", root.getKey())
@@ -125,9 +155,9 @@ func TestRebalanceRotations(t *testing.T) {
 
 	setup()
 
-	addNode(3)
-	addNode(2)
-	addNode(1)
+	AddNode(3)
+	AddNode(2)
+	AddNode(1)
 
 	if root == nil || root.getKey() != 2 {
 		t.Fatalf("LL rotation failed: root want=2, got=%v", root.getKey())
@@ -141,9 +171,9 @@ func TestRebalanceRotations(t *testing.T) {
 
 	setup()
 
-	addNode(3)
-	addNode(1)
-	addNode(2)
+	AddNode(3)
+	AddNode(1)
+	AddNode(2)
 
 	if root == nil || root.getKey() != 2 {
 		t.Fatalf("LR rotation failed: root want=2, got=%v", root.getKey())
@@ -151,9 +181,9 @@ func TestRebalanceRotations(t *testing.T) {
 
 	setup()
 
-	addNode(1)
-	addNode(3)
-	addNode(2)
+	AddNode(1)
+	AddNode(3)
+	AddNode(2)
 
 	if root == nil || root.getKey() != 2 {
 		t.Fatalf("RL rotation failed: root want=2, got=%v", root.getKey())
@@ -163,14 +193,14 @@ func TestRebalanceRotations(t *testing.T) {
 func TestRebalance(t *testing.T) {
 	setup()
 
-	addNode(1)
-	addNode(2)
-	addNode(3)
-	addNode(4)
-	addNode(5)
+	AddNode(1)
+	AddNode(2)
+	AddNode(3)
+	AddNode(4)
+	AddNode(5)
 
 	gotAfter := captureOutput(func() {
-		showTree()
+		ShowTree()
 	})
 
 	want := `
@@ -205,23 +235,23 @@ func TestShowTree(t *testing.T) {
 	r, w, _ := os.Pipe()
 	os.Stdout = w
 
-	addNode(10)
-	addNode(5)
-	addNode(15)
-	addNode(3)
-	addNode(7)
-	addNode(13)
-	addNode(18)
-	addNode(20)
-	addNode(16)
-	addNode(11)
-	addNode(14)
-	addNode(8)
-	addNode(6)
-	addNode(4)
-	addNode(1)
+	AddNode(10)
+	AddNode(5)
+	AddNode(15)
+	AddNode(3)
+	AddNode(7)
+	AddNode(13)
+	AddNode(18)
+	AddNode(20)
+	AddNode(16)
+	AddNode(11)
+	AddNode(14)
+	AddNode(8)
+	AddNode(6)
+	AddNode(4)
+	AddNode(1)
 
-	showTree()
+	ShowTree()
 
 	w.Close()
 	os.Stdout = old
