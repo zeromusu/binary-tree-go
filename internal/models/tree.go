@@ -6,7 +6,7 @@ import (
 
 var root *Node
 
-func addNode(key int) error {
+func AddNode(key int) error {
 	if root == nil {
 		root = createNode(key)
 		return nil
@@ -37,7 +37,7 @@ func addNode(key int) error {
 	return nil
 }
 
-func deleteNode(key int) error {
+func DeleteNode(key int) error {
 	if root == nil {
 		return fmt.Errorf("tree is empty")
 	}
@@ -198,7 +198,7 @@ func buildLines(node *Node, prefix string, isRight bool, isOuter bool, isRoot bo
 	}
 }
 
-func showTree() {
+func ShowTree() {
 	lines := []string{}
 	buildLines(root, "", true, true, true, &lines)
 	for _, line := range lines {
