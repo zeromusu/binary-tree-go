@@ -10,7 +10,7 @@ func createNode(key int) *Node {
 	return &Node{key: key}
 }
 
-func (n *Node) delNode() bool {
+func (n *Node) removeNode() bool {
 	if n == nil {
 		return false
 	}
