@@ -15,9 +15,9 @@ func TestCreateNode(t *testing.T) {
 	}
 }
 
-func TestDeleteNode(t *testing.T) {
+func TestRemoveNode(t *testing.T) {
 	n := createNode(initKey)
-	result := n.delNode()
+	result := n.removeNode()
 	if result == false {
 		t.Errorf("DelNode expected true, got false")
 	}
