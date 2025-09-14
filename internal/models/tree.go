@@ -36,6 +36,33 @@ func addNode(key int) error {
 	return nil
 }
 
+func rebalance(node *Node) *Node {
+	if node == nil {
+		return nil
+	}
+
+	node.setLeftChild(rebalance(node.getLeftChild()))
+	node.setRightChild(rebalance(node.getRightChild()))
+
+	balance := getBalance(node)
+
+	if balance > 1 {
+		if getBalance(node.getLeftChild()) < 0 {
+			node.setLeftChild(rotateLeft(node.getLeftChild()))
+		}
+		return rotateRight(node)
+	}
+
+	if balance < -1 {
+		if getBalance(node.getRightChild()) > 0 {
+			node.setRightChild(rotateRight(node.getRightChild()))
+		}
+		return rotateLeft(node)
+	}
+
+	return node
+}
+
 func buildLines(node *Node, prefix string, isRight bool, isOuter bool, isRoot bool, lines *[]string) {
 	if node == nil {
 		return
@@ -129,4 +156,43 @@ func showTree() {
 	for _, line := range lines {
 		fmt.Println(line)
 	}
+}
+
+func getBalance(node *Node) int {
+	if node == nil {
+		return 0
+	}
+	return getHeight(node.getLeftChild()) - getHeight(node.getRightChild())
+}
+
+func getHeight(node *Node) int {
+	if node == nil {
+		return 0
+	}
+	leftHeight := getHeight(node.getLeftChild())
+	rightHeight := getHeight(node.getRightChild())
+	if leftHeight > rightHeight {
+		return leftHeight + 1
+	}
+	return rightHeight + 1
+}
+
+func rotateRight(y *Node) *Node {
+	x := y.getLeftChild()
+	T2 := x.getRightChild()
+
+	x.setRightChild(y)
+	y.setLeftChild(T2)
+
+	return x
+}
+
+func rotateLeft(x *Node) *Node {
+	y := x.getRightChild()
+	T2 := y.getLeftChild()
+
+	y.setLeftChild(x)
+	x.setRightChild(T2)
+
+	return y
 }
